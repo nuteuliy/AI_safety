@@ -31,7 +31,8 @@ if PROVIDER == "ollama":
 else:
     from groq import Groq
 
-    client = Groq()  # ключ берётся из переменной окружения GROQ_API_KEY
+    # ключ берётся из GROQ_API_KEY; при 429/сбое сети SDK сам ждёт (retry-after) и повторяет
+    client = Groq(max_retries=10)
     # Llama-2 и Llama Guard на Groq нет — используем gpt-oss
     BASE_MODEL = os.getenv("BASE_MODEL", "openai/gpt-oss-20b")
     GUARD_MODEL = os.getenv("GUARD_MODEL", "openai/gpt-oss-safeguard-20b")
